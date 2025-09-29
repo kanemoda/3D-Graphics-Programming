@@ -1,5 +1,6 @@
 #include "utils.h"
 #include "globals.h"
+#include "display.h"
 
 bool is_running = false;
 SDL_Window* window = NULL;
