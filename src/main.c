@@ -1,14 +1,11 @@
 #include "utils.h"
 #include "globals.h"
 #include "display.h"
+#include "vector.h"
 
-bool is_running = false;
-SDL_Window* window = NULL;
-SDL_Renderer* renderer = NULL;
-uint32_t* color_buffer = NULL;
-SDL_Texture* color_buffer_texture = NULL;
-int window_width = 800;
-int window_height = 600;
+
+#define N_POINTS  (9*9*9)
+vect3_t cube_points[N_POINTS];
 
 void process_input(void)
 {
@@ -68,7 +65,23 @@ void setup(void)
         is_running = false;
         return;
     }
+    
+
+    //Load array of vectors
+    int point_count = 0;
+    for (float  i = -1; i <= 1; i += 0.25)
+    {
+        for (float j = -1; j <= 1; j += 0.25)
+        {
+            for (float k = -1; k <= 1; k += 0.25)
+            {
+                vect3_t new_point = {i,j,k};
+                cube_points[point_count++] = new_point;
+            }
+            
+        }
         
+    }
     
 }
 
@@ -76,7 +89,8 @@ void render(void)
 {    
     uint32_t color = rainbow_color();
     clear_color_buffer(color);
-    draw_grid_fast(10,0xFF000000);
+    //draw_grid_fast(10,0xFF000000);
+    draw_pixel(20,20,0xFFFFFFFF);
     dvd_animation(0xFF000000);
     render_color_buffer();
     SDL_RenderPresent(renderer);

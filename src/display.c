@@ -200,3 +200,13 @@ uint32_t rainbow_color(void) {
 
     return 0xFF000000 | (r << 16) | (g << 8) | b;
 }
+
+void draw_pixel(int x, int y, uint32_t color)
+{
+    if (x < window_width && y < window_height)
+    {
+        color_buffer[(window_width * y) + x] = color;
+    }
+    
+
+}

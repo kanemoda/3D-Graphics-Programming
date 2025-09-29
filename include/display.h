@@ -11,6 +11,7 @@ bool initialize_window(void);
 void draw_grid(void);
 void draw_grid_fast(int step, uint32_t color);
 void draw_grid_GPU(int step, SDL_Color c);
+void draw_pixel(int x, int y, uint32_t color);
 void draw_rect(uint32_t color, int x1 , int y1, int x2, int y2);
 void render_color_buffer(void);
 void clear_color_buffer(uint32_t color);
