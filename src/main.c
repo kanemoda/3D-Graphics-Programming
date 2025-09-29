@@ -5,7 +5,8 @@
 
 
 #define N_POINTS  (9*9*9)
-vect3_t cube_points[N_POINTS];
+vec3_t cube_points[N_POINTS];
+vec2_t projected_points[N_POINTS];
 
 void process_input(void)
 {
@@ -26,9 +27,19 @@ void process_input(void)
     }
 }
 
+
+
 void update (void)
 {
-    //TODO:
+    for (int i = 0; i < N_POINTS; i++)
+    {
+        vec3_t vec3 = cube_points[i];
+
+        vec2_t vec2 = project(vec3);
+
+        projected_points[i] = vec2;
+    }
+    
 }
 
 void setup(void)
@@ -75,7 +86,7 @@ void setup(void)
         {
             for (float k = -1; k <= 1; k += 0.25)
             {
-                vect3_t new_point = {i,j,k};
+                vec3_t new_point = {i,j,k};
                 cube_points[point_count++] = new_point;
             }
             
@@ -87,12 +98,29 @@ void setup(void)
 
 void render(void)
 {    
-    uint32_t color = rainbow_color();
-    clear_color_buffer(color);
-    //draw_grid_fast(10,0xFF000000);
-    draw_pixel(20,20,0xFFFFFFFF);
-    dvd_animation(0xFF000000);
+    uint32_t bgc = rainbow_color();
+    clear_color_buffer(bgc);
+
+    draw_grid_fast(10, 0xFF0F0F0F);
+    
+
+    
+
+    for (int i = 0; i < N_POINTS; i++)
+    {
+        vec2_t vec2 = projected_points[i];
+        draw_rect(
+            0xFFFFFF00,
+            vec2.x + (window_width / 2),
+            vec2.y + (window_height / 2),
+            vec2.x + (window_width / 2) + 4,
+            vec2.y + (window_height / 2) + 4
+        );
+    }
+    
+
     render_color_buffer();
+    clear_color_buffer(0xFF000000);
     SDL_RenderPresent(renderer);
 }
 

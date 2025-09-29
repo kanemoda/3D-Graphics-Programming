@@ -140,7 +140,8 @@ void draw_rect(uint32_t color, int x1 , int y1, int x2, int y2)
         for (int x = x1; x < x2; x++)
         {
             int wx = wrap(x, window_width);
-            color_buffer[(wy * window_width) + wx] = color;
+            draw_pixel(wx,wy,color);
+            //color_buffer[(wy * window_width) + wx] = color;
         }
         
     }  
@@ -203,7 +204,7 @@ uint32_t rainbow_color(void) {
 
 void draw_pixel(int x, int y, uint32_t color)
 {
-    if (x < window_width && y < window_height)
+    if (x >= 0 && x < window_width && y>= 0 && y < window_height)
     {
         color_buffer[(window_width * y) + x] = color;
     }
