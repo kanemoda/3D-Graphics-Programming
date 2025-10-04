@@ -8,3 +8,5 @@ SDL_Texture* color_buffer_texture = NULL;
 int window_width = 800;
 int window_height = 600;
 float fov_factor = 640; 
+vec3_t cube_rotation = {0, 0, 0};
+vec3_t cube_rotation_speed = {0, 0, 0};

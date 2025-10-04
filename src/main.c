@@ -10,6 +10,7 @@ vec2_t projected_points[N_POINTS];
 
 vec3_t camera_position = {.x = 0, .y = 0, .z = -5};
 
+
 void process_input(void)
 {
     SDL_Event event;
@@ -27,22 +28,38 @@ void process_input(void)
                 }
                 break;
     }
+
+    const uint8_t *state = SDL_GetKeyboardState(NULL);
+
+    cube_rotation_speed.x = 0;
+    cube_rotation_speed.y = 0;
+    cube_rotation_speed.z = 0;
+
+    if (state[SDL_SCANCODE_LEFT])  cube_rotation_speed.y = -0.004f;
+    if (state[SDL_SCANCODE_RIGHT]) cube_rotation_speed.y =  0.004f;
+    if (state[SDL_SCANCODE_UP])    cube_rotation_speed.x = -0.004f;
+    if (state[SDL_SCANCODE_DOWN])  cube_rotation_speed.x =  0.004f;
+    if (state[SDL_SCANCODE_Q])     cube_rotation_speed.z = -0.004f;
+    if (state[SDL_SCANCODE_E])     cube_rotation_speed.z =  0.004f;
 }
 
 
 
 void update (void)
 {
-    for (int i = 0; i < N_POINTS; i++)
-    {
-        vec3_t vec3 = cube_points[i];
+    //Apply rotation from input
+    cube_rotation.x += cube_rotation_speed.x;
+    cube_rotation.y += cube_rotation_speed.y;
+    cube_rotation.z += cube_rotation_speed.z;
 
-        //Mpve the point away from the camera
-        vec3.z -= camera_position.z;
+    //Normalize angles
+    if (cube_rotation.x > M_PI*2) cube_rotation.x -= M_PI*2;
+    if (cube_rotation.y > M_PI*2) cube_rotation.y -= M_PI*2;
+    if (cube_rotation.z > M_PI*2) cube_rotation.z -= M_PI*2;
 
-        vec2_t vec2 = Perspective_project(vec3);
-
-        projected_points[i] = vec2;
+    for (int i = 0; i < N_POINTS; i++) {
+        vec3_t transformed = transform_point(cube_points[i], cube_rotation, camera_position);
+        projected_points[i] = Perspective_project(transformed); 
     }
     
 }
