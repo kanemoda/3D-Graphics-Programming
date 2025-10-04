@@ -8,6 +8,8 @@
 vec3_t cube_points[N_POINTS];
 vec2_t projected_points[N_POINTS];
 
+vec3_t camera_position = {.x = 0, .y = 0, .z = -5};
+
 void process_input(void)
 {
     SDL_Event event;
@@ -35,7 +37,10 @@ void update (void)
     {
         vec3_t vec3 = cube_points[i];
 
-        vec2_t vec2 = project(vec3);
+        //Mpve the point away from the camera
+        vec3.z -= camera_position.z;
+
+        vec2_t vec2 = Perspective_project(vec3);
 
         projected_points[i] = vec2;
     }
@@ -98,8 +103,7 @@ void setup(void)
 
 void render(void)
 {    
-    uint32_t bgc = rainbow_color();
-    clear_color_buffer(bgc);
+    clear_color_buffer(0xFF000000);
 
     draw_grid_fast(10, 0xFF0F0F0F);
     
